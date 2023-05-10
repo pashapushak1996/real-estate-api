@@ -1,0 +1,43 @@
+{
+  "name": "real-estate-api",
+  "version": "1.0.0",
+  "description": "This is api for real-estate-app",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pashapushak1996/real-estate-api.git"
+  },
+  "author": "Pavlo Pushak",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pashapushak1996/real-estate-api/issues"
+  },
+  "homepage": "https://github.com/pashapushak1996/real-estate-api#readme",
+  "dependencies": {
+    "aws-sdk": "^2.1376.0",
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "helmet": "^7.0.0",
+    "joi": "^17.9.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.1.0",
+    "nodemailer": "^6.9.1",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^6.4.7",
+    "@types/email-templates": "^10.0.1",
+    "eslint": "^8.40.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-node": "^11.1.0",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.22"
+  }
+}
