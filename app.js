@@ -1,15 +1,29 @@
 const express = require('express');
+const cors = require('cors');
+const morgan = require('morgan');
+
+require('dotenv').config();
+
+const { dbInit } = require('./util');
 
 const { PORT } = require('./config');
-const { authRouter } = require('./router');
+
+const apiRouter = require('./router');
 
 const app = express();
 
+// Main config
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
+app.use(morgan('tiny'));
 
 app.listen(PORT, () => {
     console.log(`App is listened on ${ PORT } port`);
 });
 
-app.use('/auth', authRouter);
+// database initialization
+dbInit();
+
+// Routes
+app.use('/', apiRouter);

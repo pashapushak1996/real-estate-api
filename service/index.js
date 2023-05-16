@@ -1,3 +1,3 @@
 module.exports = {
-    // There will be services
+    passwordService: require('./password.service'),
 };

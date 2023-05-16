@@ -1,3 +1,1 @@
-module.exports = {
-    authRouter: require('./auth.router')
-};
+module.exports = require('./api.router');

@@ -129,6 +129,7 @@ module.exports = {
             'error',
             'as-needed',
         ],
+        'import/no-extraneous-dependencies': 'off',
         radix: 'error',
         'require-await': 'error',
         'sort-imports': [

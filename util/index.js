@@ -1,3 +1,4 @@
 module.exports = {
-    // There will be utils paths
+    dbInit: require('./mongoose.util'),
+    userUtils: require('./user.utils'),
 };
