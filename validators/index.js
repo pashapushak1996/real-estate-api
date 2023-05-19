@@ -1,3 +1,3 @@
 module.exports = {
-    // There will be validators
+    userValidator: require('./user.validator'),
 };

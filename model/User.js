@@ -1,5 +1,7 @@
 const { Schema, model } = require('mongoose');
 
+const { dbModels } = require('../constants');
+
 const userSchema = new Schema({
     name: { type: String, required: true },
     email: {
@@ -12,6 +14,4 @@ const userSchema = new Schema({
     image: String,
 }, { timestamps: true });
 
-userSchema.set('toJSON', { virtuals: true });
-
-module.exports = model('User', userSchema);
+module.exports = model(dbModels.USER, userSchema);

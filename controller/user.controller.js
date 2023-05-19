@@ -1,6 +1,7 @@
 const { User } = require('../model');
 const { passwordService } = require('../service');
 const { userNormalizator } = require('../util/user.utils');
+const { statusCodes } = require('../constants');
 
 const userController = {
     create: async (req, res, next) => {
@@ -9,14 +10,13 @@ const userController = {
 
             const hashedPassword = await passwordService.hash(password);
 
-            const user = await User.create({ ...req.body, password: hashedPassword });
+            const userDocument = await User.create({ ...req.body, password: hashedPassword });
 
-            const userObject = user.toJSON();
+            const userObject = userDocument.toObject();
 
             const normalizedUser = userNormalizator(userObject);
 
-            console.log(normalizedUser);
-            res.status(201).json(normalizedUser);
+            res.status(statusCodes.CREATED).json(normalizedUser);
         } catch (e) {
             next(e);
         }

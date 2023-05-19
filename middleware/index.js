@@ -1,3 +1,3 @@
 module.exports = {
-    // There will be middlewares paths
+    userMiddleware: require('./user.middleware'),
 };
