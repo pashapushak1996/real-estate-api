@@ -10,7 +10,7 @@ const createUser = Joi.object({
 });
 
 const updateUser = Joi.object({
-    name: Joi.string().alphanum().min(2).max(3),
+    name: Joi.string().alphanum().min(2).max(30),
     email: Joi.string(),
     image: Joi.string(),
 });

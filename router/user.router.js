@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 const { userController } = require('../controller');
-const { userMiddleware } = require('../middleware');
+const { userMiddleware, authMiddleware } = require('../middleware');
 const { userValidator } = require('../validators');
 
 router.post(
@@ -13,16 +13,18 @@ router.post(
 );
 
 router.put(
-    '/:userId',
+    '/:user_id',
     userMiddleware.validateUserBody(userValidator.updateUser),
-    userMiddleware.getUserByDynamicParams('email'),
+    authMiddleware.checkAccessToken,
+    userMiddleware.getUserByDynamicParams('user_id', 'params', '_id'),
     userMiddleware.isUserExist(false),
     userController.update,
 );
 
 router.delete(
-    '/:userId',
-    userMiddleware.getUserByDynamicParams('email'),
+    '/:user_id',
+    authMiddleware.checkAccessToken,
+    userMiddleware.getUserByDynamicParams('user_id', 'params', '_id'),
     userMiddleware.isUserExist(false),
     userController.delete,
 );

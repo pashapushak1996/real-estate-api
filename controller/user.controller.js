@@ -22,17 +22,31 @@ const userController = {
         }
     },
 
-    update: (req, res, next) => {
+    update: async (req, res, next) => {
         try {
+            const { loggedUser, body } = req;
 
+            const user = await User.findByIdAndUpdate(
+                loggedUser._id,
+                { ...loggedUser, ...body },
+                { new: true },
+            );
+
+            const normalizedUser = userNormalizator(user.toObject());
+
+            res.json(normalizedUser);
         } catch (e) {
             next(e);
         }
     },
 
-    delete: (req, res, next) => {
+    delete: async (req, res, next) => {
         try {
+            const { user } = req;
 
+            await User.deleteOne({ _id: user._id });
+
+            res.status(statusCodes.NO_CONTENT).end();
         } catch (e) {
             next(e);
         }

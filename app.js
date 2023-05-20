@@ -26,7 +26,7 @@ app.listen(PORT, () => {
 // database initialization
 dbInit();
 
-// Routes
+// Router
 app.use('/', apiRouter);
 app.use('*', errorUtils._notFoundErrorHandler);
 app.use(errorUtils._mainErrorHandler);

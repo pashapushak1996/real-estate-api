@@ -21,7 +21,7 @@ const userMiddleware = {
             const { user } = req;
 
             if (user && throwError) {
-                throw new ErrorHandler(statusCodes.NOT_FOUND, 'User is already exist');
+                throw new ErrorHandler(statusCodes.CONFLICT, 'User is already exist');
             }
 
             if (!user && !throwError) {

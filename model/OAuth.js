@@ -7,7 +7,7 @@ const oauthSchema = new Schema({
         type: String,
         required: true,
     },
-    refresh: {
+    refresh_token: {
         type: String,
         required: true,
     },

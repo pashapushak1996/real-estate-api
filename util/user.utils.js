@@ -1,7 +1,6 @@
 const userNormalizator = (userObj) => {
-    console.log(userObj);
     const fields = [
-        '_id',
+        '__v',
         'password',
     ];
 
