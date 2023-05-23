@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const { regExps } = require('../constants');
+const { regExps } = require('../config');
 
 const createUser = Joi.object({
     name: Joi.string().alphanum().min(2).max(30).required(),

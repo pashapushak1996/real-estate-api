@@ -1,0 +1,5 @@
+extends container
+block content
+    h2 Welcome dear #{username}
+    p Thank you for subscribing. Please confirm your email by clicking on the following link
+    a(href=`${ apiURL }/auth/confirm/${ confirmationCode }`) Confirm

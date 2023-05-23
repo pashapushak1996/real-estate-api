@@ -1,7 +1,8 @@
+const jwt = require('jsonwebtoken');
 const { User } = require('../model');
-const { passwordService } = require('../service');
+const { passwordService, emailService } = require('../service');
 const { userNormalizator } = require('../util/user.utils');
-const { statusCodes } = require('../constants');
+const { statusCodes, emailActions, variables } = require('../config');
 
 const userController = {
     create: async (req, res, next) => {
@@ -10,11 +11,23 @@ const userController = {
 
             const hashedPassword = await passwordService.hash(password);
 
-            const userDocument = await User.create({ ...req.body, password: hashedPassword });
+            const confirmationCode = jwt.sign({}, variables.CONFIRM_SECRET_KEY, { expiresIn: '1d' });
+
+            const userDocument = await User.create({ ...req.body, password: hashedPassword, confirmationCode });
 
             const userObject = userDocument.toObject();
 
             const normalizedUser = userNormalizator(userObject);
+
+            await emailService
+                .sendActivationEmail(
+                    userObject.email,
+                    emailActions.WELCOME,
+                    {
+                        username: userObject.name,
+                        confirmationCode,
+                    },
+                );
 
             res.status(statusCodes.CREATED).json(normalizedUser);
         } catch (e) {

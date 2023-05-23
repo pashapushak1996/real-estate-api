@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const { dbModels } = require('../constants');
+const { dbModels } = require('../config');
 
 const oauthSchema = new Schema({
     access_token: {

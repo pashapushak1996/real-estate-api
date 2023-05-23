@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+
 const { ErrorHandler } = require('../error');
 
 const passwordService = {

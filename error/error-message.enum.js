@@ -13,4 +13,5 @@ module.exports = {
     FILE_EXTENSION_ERR: 'File extension not valid',
     LARGE_FILE_ERR: 'File is too large',
     CORS_ERR: 'Cors not allowed',
+    NOT_ACTIVE_ACCOUNT: 'Pending Account. Please Verify Your Email!',
 };

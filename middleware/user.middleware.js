@@ -1,5 +1,5 @@
-const { ErrorHandler } = require('../error');
-const { statusCodes } = require('../constants');
+const { ErrorHandler, errorMessageEnum } = require('../error');
+const { statusCodes, userStatuses } = require('../config');
 const { User } = require('../model');
 
 const userMiddleware = {
@@ -9,6 +9,19 @@ const userMiddleware = {
 
             if (error) {
                 throw new ErrorHandler(statusCodes.BAD_REQUEST, error.details[0].message);
+            }
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+    checkUserStatus: (req, res, next) => {
+        try {
+            const { user } = req;
+
+            if (user.status !== userStatuses.ACTIVE) {
+                throw new ErrorHandler(statusCodes.UNAUTHORIZED, errorMessageEnum.NOT_ACTIVE_ACCOUNT);
             }
 
             next();

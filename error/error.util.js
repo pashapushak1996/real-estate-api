@@ -1,4 +1,4 @@
-const { statusCodes } = require('../constants');
+const { statusCodes } = require('../config');
 const errorMessages = require('./error-message.enum');
 
 function _notFoundErrorHandler(err, req, res, next) {

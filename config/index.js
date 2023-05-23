@@ -1,6 +1,9 @@
 module.exports = {
-    PORT: process.env.PORT || 5001,
-
-    ACCESS_SECRET_KEY: process.env.ACCESS_SECRET_KEY || 'access',
-    REFRESH_SECRET_KEY: process.env.REFRESH_SECRET_KEY || 'refresh',
+    constants: require('./constants'),
+    variables: require('./variables'),
+    dbModels: require('./db-models.enum'),
+    regExps: require('./regExp.enum'),
+    statusCodes: require('./status-codes.enum'),
+    emailActions: require('./email-actions.enum'),
+    userStatuses: require('./user.statuses.enum'),
 };

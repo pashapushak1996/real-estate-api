@@ -1,4 +1,4 @@
 module.exports = {
-    User: require('./User'),
-    OAuth: require('./OAuth'),
+    User: require('./user.model'),
+    OAuth: require('./oauth.model'),
 };

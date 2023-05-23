@@ -1,12 +1,12 @@
 const { ErrorHandler, errorMessageEnum } = require('../error');
-const { statusCodes } = require('../constants');
 const { jwtService } = require('../service');
 const { OAuth } = require('../model');
+const { constants, statusCodes } = require('../config');
 
 const authMiddleware = {
     checkAccessToken: async (req, res, next) => {
         try {
-            const access_token = req.get('authorization');
+            const access_token = req.get(constants.Authorization);
 
             if (!access_token) {
                 throw new ErrorHandler(statusCodes.UNAUTHORIZED, errorMessageEnum.NO_TOKEN);

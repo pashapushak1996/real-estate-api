@@ -5,7 +5,7 @@ const { promisify } = require('util');
 const verify = promisify(jwt.verify);
 
 const { ACCESS_SECRET_KEY, REFRESH_SECRET_KEY } = require('../config');
-const { statusCodes } = require('../constants');
+const { statusCodes } = require('../config');
 const { ErrorHandler, errorMessageEnum } = require('../error');
 
 const jwtService = {
