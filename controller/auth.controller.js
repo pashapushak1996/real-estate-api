@@ -1,7 +1,12 @@
 const { passwordService, jwtService } = require('../service');
-const { OAuth, User } = require('../model');
+const { OAuth, User, EmailConfirmation } = require('../model');
 const { userNormalizator } = require('../util/user.utils');
-const { statusCodes, constants, userStatuses } = require('../config');
+const {
+    statusCodes,
+    constants,
+    userStatuses,
+    variables
+} = require('../config');
 const { ErrorHandler, errorMessageEnum } = require('../error');
 
 const authController = {
@@ -56,6 +61,14 @@ const authController = {
             if (!confirmationCode) {
                 throw new ErrorHandler(statusCodes.NOT_FOUND, errorMessageEnum.NOT_FOUND_ERR);
             }
+
+            const tokenFromDB = await EmailConfirmation.find({ confirmationCode });
+
+            if (tokenFromDB.expired) {
+                throw new ErrorHandler(statusCodes.UNAUTHORIZED, 'Confirmation code is expired');
+            }
+
+            await jwtService.verifyActionToken(confirmationCode, variables.CONFIRM_SECRET_KEY);
 
             const userDocument = await User.findOneAndUpdate(
                 { confirmationCode },

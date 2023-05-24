@@ -1,4 +1,5 @@
 module.exports = {
-    User: require('./user.model'),
+    EmailConfirmation: require('./email-confirmation.model'),
     OAuth: require('./oauth.model'),
+    User: require('./user.model'),
 };

@@ -16,11 +16,6 @@ const userSchema = new Schema({
         required: true,
         default: userStatuses.PENDING,
     },
-    confirmationCode: {
-        type: String,
-        required: true,
-        selected: false,
-    },
     password: { type: String, required: true },
     image: String,
 }, { timestamps: true });

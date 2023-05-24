@@ -29,6 +29,13 @@ const jwtService = {
             throw new ErrorHandler(statusCodes.UNAUTHORIZED, errorMessageEnum.WRONG_TOKEN);
         }
     },
+    verifyActionToken: async (token, secretWord) => {
+        try {
+            await verify(token, secretWord);
+        } catch (e) {
+            throw new ErrorHandler(statusCodes.UNAUTHORIZED, errorMessageEnum.WRONG_TOKEN);
+        }
+    },
 };
 
 module.exports = jwtService;
