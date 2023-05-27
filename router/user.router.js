@@ -12,13 +12,6 @@ router.post(
     userController.create,
 );
 
-router.get(
-    '/:user_id/resendConfirmation',
-    userMiddleware.getUserByDynamicParams('user_id', 'params', '_id'),
-    userMiddleware.isUserExist(false),
-    userController.resendConfirmation,
-);
-
 router.put(
     '/:user_id',
     userMiddleware.validateUserBody(userValidator.updateUser),

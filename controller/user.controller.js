@@ -54,38 +54,6 @@ const userController = {
             next(e);
         }
     },
-
-    resendConfirmation: async (req, res, next) => {
-        try {
-            const { user } = req;
-
-            await EmailConfirmation.updateMany({ user: user._id }, { expired: true });
-
-            const confirmationCode = await jwt.sign(
-                {},
-                variables.CONFIRM_SECRET_KEY,
-                { expiresIn: '5d' },
-            );
-
-            await EmailConfirmation.create({ confirmationCode, user: user._id });
-
-            await emailService.sendActivationEmail(
-                user.email,
-                emailActions.WELCOME,
-                {
-                    username: user.name,
-                    confirmationCode,
-                },
-            );
-
-            const userObject = user.toJSON();
-
-            res.json({ ...userNormalizator(userObject) });
-        } catch (e) {
-            next(e);
-        }
-    },
-
     delete: async (req, res, next) => {
         try {
             const { user } = req;

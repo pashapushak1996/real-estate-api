@@ -1,11 +1,12 @@
-const { passwordService, jwtService } = require('../service');
+const jwt = require('jsonwebtoken');
+const { passwordService, jwtService, emailService } = require('../service');
 const { OAuth, User, EmailConfirmation } = require('../model');
 const { userNormalizator } = require('../util/user.utils');
 const {
     statusCodes,
     constants,
     userStatuses,
-    variables
+    variables, emailActions,
 } = require('../config');
 const { ErrorHandler, errorMessageEnum } = require('../error');
 
@@ -62,7 +63,11 @@ const authController = {
                 throw new ErrorHandler(statusCodes.NOT_FOUND, errorMessageEnum.NOT_FOUND_ERR);
             }
 
-            const tokenFromDB = await EmailConfirmation.find({ confirmationCode });
+            const tokenFromDB = await EmailConfirmation.findOne({ confirmationCode }).populate('user');
+
+            if (!tokenFromDB) {
+                throw new ErrorHandler(statusCodes.NOT_FOUND, errorMessageEnum.NOT_FOUND_ERR);
+            }
 
             if (tokenFromDB.expired) {
                 throw new ErrorHandler(statusCodes.UNAUTHORIZED, 'Confirmation code is expired');
@@ -70,19 +75,51 @@ const authController = {
 
             await jwtService.verifyActionToken(confirmationCode, variables.CONFIRM_SECRET_KEY);
 
-            const userDocument = await User.findOneAndUpdate(
-                { confirmationCode },
-                { status: userStatuses.ACTIVE },
+            const userId = tokenFromDB.user._id;
+
+            const userDocument = await User.findByIdAndUpdate(
+                userId,
+                { $set: { status: userStatuses.ACTIVE } },
                 { new: true },
             );
 
             if (!userDocument) {
-                throw new ErrorHandler(statusCodes.NOT_FOUND, errorMessageEnum, 'User not found');
+                throw new ErrorHandler(statusCodes.NOT_FOUND, 'User not found');
             }
 
             const userObject = userDocument.toJSON();
 
-            res.json({ ...userObject });
+            res.json(userNormalizator(userObject));
+        } catch (e) {
+            next(e);
+        }
+    },
+    sendConfirmation: async (req, res, next) => {
+        try {
+            const { user } = req;
+
+            await EmailConfirmation.updateMany({ user: user._id }, { expired: true });
+
+            const confirmationCode = await jwt.sign(
+                {},
+                variables.CONFIRM_SECRET_KEY,
+                { expiresIn: '1d' },
+            );
+
+            await EmailConfirmation.create({ confirmationCode, user: user._id });
+
+            await emailService.sendActivationEmail(
+                user.email,
+                emailActions.WELCOME,
+                {
+                    username: user.name,
+                    confirmationCode,
+                },
+            );
+
+            const userObject = user.toJSON();
+
+            res.json({ ...userNormalizator(userObject) });
         } catch (e) {
             next(e);
         }
