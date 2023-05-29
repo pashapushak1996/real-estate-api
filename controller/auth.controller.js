@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const {
     passwordService,
     jwtService,
-    emailService
+    emailService,
 } = require('../service');
 
 const {
@@ -131,6 +131,7 @@ const authController = {
                 emailActions.WELCOME,
                 {
                     username: user.name,
+                    API_URL: variables.API_URL,
                     confirmationCode,
                 },
             );

@@ -10,6 +10,7 @@ const variables = {
     MAIL_PASSWORD: process.env.MAIL_PASSWORD || 'h1234',
 
     FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:5173/',
+    API_URL: process.env.API_URL || 'http://localhost:5001',
 };
 
 module.exports = variables;
