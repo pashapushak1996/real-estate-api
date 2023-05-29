@@ -1,13 +1,27 @@
 const jwt = require('jsonwebtoken');
-const { passwordService, jwtService, emailService } = require('../service');
-const { OAuth, User, EmailConfirmation } = require('../model');
+
+const {
+    passwordService,
+    jwtService,
+    emailService
+} = require('../service');
+
+const {
+    OAuth,
+    User,
+    EmailConfirmation,
+    ForgotPassword,
+} = require('../model');
+
 const { userNormalizator } = require('../util/user.utils');
+
 const {
     statusCodes,
     constants,
     userStatuses,
     variables, emailActions,
 } = require('../config');
+
 const { ErrorHandler, errorMessageEnum } = require('../error');
 
 const authController = {
@@ -27,6 +41,7 @@ const authController = {
             next(e);
         }
     },
+
     logout: async (req, res, next) => {
         try {
             const user = req.loggedUser;
@@ -38,6 +53,7 @@ const authController = {
             next(e);
         }
     },
+
     refresh: async (req, res, next) => {
         try {
             const refresh_token = req.get(constants.Authorization);
@@ -55,6 +71,7 @@ const authController = {
             next(e);
         }
     },
+
     verify: async (req, res, next) => {
         try {
             const { confirmationCode } = req.params;
@@ -94,6 +111,7 @@ const authController = {
             next(e);
         }
     },
+
     sendConfirmation: async (req, res, next) => {
         try {
             const { user } = req;
@@ -108,7 +126,7 @@ const authController = {
 
             await EmailConfirmation.create({ confirmationCode, user: user._id });
 
-            await emailService.sendActivationEmail(
+            await emailService.sendEmail(
                 user.email,
                 emailActions.WELCOME,
                 {
@@ -120,6 +138,55 @@ const authController = {
             const userObject = user.toJSON();
 
             res.json({ ...userNormalizator(userObject) });
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    forgotPassword: async (req, res, next) => {
+        try {
+            const { user } = req;
+
+            const action_token = await jwtService.generateActionToken(variables.FORGOT_SECRET_KEY, '10m');
+
+            await emailService.sendEmail(
+                user.email,
+                emailActions.FORGOT_PASSWORD,
+                { username: user.name, action_token },
+            );
+
+            await ForgotPassword.create({ action_token, user: user._id });
+
+            res.status(statusCodes.CREATED);
+        } catch (e) {
+            next(e);
+        }
+    },
+    resetPassword: async (req, res, next) => {
+        try {
+            const { body: { password }, params: { action_token } } = req;
+
+            if (!action_token) {
+                throw new ErrorHandler(statusCodes.UNAUTHORIZED, errorMessageEnum.NO_TOKEN);
+            }
+
+            await jwtService.verifyActionToken(action_token, variables.FORGOT_SECRET_KEY);
+
+            const tokenFromDB = await ForgotPassword.findOne({ action_token }).populate('user');
+
+            if (!tokenFromDB) {
+                throw new ErrorHandler(statusCodes.UNAUTHORIZED, errorMessageEnum.WRONG_TOKEN);
+            }
+
+            const hashedPassword = await passwordService.hash(password);
+
+            const userId = tokenFromDB.user._id;
+
+            await User.findByIdAndUpdate(userId, { password: hashedPassword });
+
+            await OAuth.deleteMany({ user: userId });
+
+            res.status(statusCodes.OK).end();
         } catch (e) {
             next(e);
         }

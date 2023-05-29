@@ -21,7 +21,7 @@ const transport = nodemailer.createTransport({
 });
 
 const emailService = {
-    sendActivationEmail: async (userMail, emailAction, context = {}) => {
+    sendEmail: async (userMail, emailAction, context = {}) => {
         const templateInfo = templates[emailAction];
 
         if (!templateInfo) {
@@ -30,7 +30,7 @@ const emailService = {
 
         const { templateName, subject } = templateInfo;
 
-        context.apiURL = variables.API_URL;
+        context.FRONTEND_URL = variables.FRONTEND_URL;
 
         const html = await templateParser.render(templateName, context);
 

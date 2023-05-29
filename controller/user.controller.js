@@ -22,7 +22,7 @@ const userController = {
             await EmailConfirmation.create({ confirmationCode, user: normalizedUser._id });
 
             await emailService
-                .sendActivationEmail(
+                .sendEmail(
                     userObject.email,
                     emailActions.WELCOME,
                     {

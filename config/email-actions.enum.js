@@ -1,5 +1,6 @@
 const emailActionsEnum = {
-    WELCOME: 'welcome'
+    WELCOME: 'welcome',
+    FORGOT_PASSWORD: 'forgot_password',
 };
 
 module.exports = emailActionsEnum;

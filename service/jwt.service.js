@@ -29,6 +29,9 @@ const jwtService = {
             throw new ErrorHandler(statusCodes.UNAUTHORIZED, errorMessageEnum.WRONG_TOKEN);
         }
     },
+    generateActionToken: (secretWord, expiresIn, payload = {}) => {
+        return jwt.sign(payload, secretWord, { expiresIn });
+    },
     verifyActionToken: async (token, secretWord) => {
         try {
             await verify(token, secretWord);

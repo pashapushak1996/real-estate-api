@@ -15,7 +15,12 @@ const updateUser = Joi.object({
     image: Joi.string(),
 });
 
+const updatePassword = Joi.object({
+    password: Joi.string().pattern(new RegExp(regExps.PASSWORD)).required(),
+});
+
 module.exports = {
     createUser,
     updateUser,
+    updatePassword,
 };
