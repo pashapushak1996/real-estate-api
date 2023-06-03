@@ -300,7 +300,7 @@
       }
     },
     "/auth/password/reset/{action_token}": {
-      "post": {
+      "patch": {
         "tags": [
           "auth"
         ],
@@ -310,7 +310,15 @@
             "name": "password",
             "in": "body",
             "type": "string",
-            "description": "It should be a new password"
+            "description": "It should be a new password",
+            "required": true
+          },
+          {
+            "name": "action_token",
+            "in": "path",
+            "type": "string",
+            "description": "It's action token which I sent you",
+            "required": true
           }
         ],
         "responses": {
