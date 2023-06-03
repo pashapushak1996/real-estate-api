@@ -1,0 +1,19 @@
+{
+  "properties": {
+    "name": {
+      "type": "string",
+      "default": "John"
+    },
+    "email": {
+      "type": "string",
+      "default": "Doe"
+    },
+    "status": {
+      "type": "string",
+      "default": "Pending"
+    },
+    "_id": {
+      "type": "string"
+    }
+  }
+}

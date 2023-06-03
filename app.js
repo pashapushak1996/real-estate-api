@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const swaggerUI = require('swagger-ui-express');
 
 require('dotenv').config();
 
@@ -10,6 +11,7 @@ const { dbInit } = require('./util');
 
 const { variables } = require('./config');
 const apiRouter = require('./router');
+const swaggerJson = require('./docs/swagger.json');
 
 const app = express();
 
@@ -27,6 +29,7 @@ app.listen(variables.PORT, () => {
 dbInit();
 
 // Router
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerJson));
 app.use('/', apiRouter);
 app.use('*', errorUtils._notFoundErrorHandler);
 app.use(errorUtils._mainErrorHandler);

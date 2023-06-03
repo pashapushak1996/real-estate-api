@@ -136,9 +136,7 @@ const authController = {
                 },
             );
 
-            const userObject = user.toJSON();
-
-            res.json({ ...userNormalizator(userObject) });
+            res.json({ message: 'Confirmation sent' });
         } catch (e) {
             next(e);
         }

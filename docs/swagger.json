@@ -1,0 +1,324 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Real-estate api",
+    "description": "It's api for real-estate application",
+    "version": "0.1"
+  },
+  "host": "https://real-estate-api-dafx.onrender.com",
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "operationId": "userSignUp",
+        "description": "Sign up or Create user",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "body",
+            "uniqueItems": true,
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "name",
+            "in": "body",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "password",
+            "in": "body",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "image",
+            "in": "body",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "It returns user object, you can use this for sign up",
+            "schema": {
+              "type": "object",
+              "$ref": "./user.json"
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}": {
+      "put": {
+        "tags": [
+          "users"
+        ],
+        "operationId": "updateUser",
+        "description": "Update user",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "email",
+            "in": "body",
+            "uniqueItems": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "body",
+            "type": "string"
+          },
+          {
+            "name": "image",
+            "in": "body",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "It returns updated user object",
+            "schema": {
+              "$ref": "./user.json"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "users"
+        ],
+        "operationId": "deleteUser",
+        "description": "Delete user by id",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "It returns just status code"
+          }
+        }
+      }
+    },
+    "/auth": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "description": "Sign in api call",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "body",
+            "uniqueItems": true,
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "password",
+            "in": "body",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "It returns token pair and user info",
+            "schema": {
+              "properties": {
+                "action_token": {
+                  "type": "string",
+                  "default": "dfsdf32r34grtvtbyny6"
+                },
+                "refresh_token": {
+                  "type": "string",
+                  "default": "dfs45g45g34assdfyny6"
+                },
+                "user": {
+                  "$ref": "./user.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "It returns message",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "default": "Pending Account. Please Verify Your Email!"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "description": "User logout",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "description": "It has to be access in Authorization header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "It returns OK"
+          }
+        }
+      }
+    },
+    "/auth/confirm/sendConfirmation": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "description": "It sends confirmation code again",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "default": "john@gmail.com",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "default": "Confirmation sent"
+                }
+              }
+            },
+            "description": "Return you a message"
+          }
+        }
+      }
+    },
+    "/auth/confirm/{confirmationCode}": {
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "description": "Confirm user",
+        "parameters": [
+          {
+            "name": "confirmationCode",
+            "in": "path",
+            "type": "string",
+            "description": "confirmation code",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "It returns user object if confirmation passed",
+            "schema": {
+              "$ref": "./user.json"
+            }
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "description": "Refresh token",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "description": "It has to be refresh token in Authorization header"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "It returns token pair and user info",
+            "schema": {
+              "properties": {
+                "action_token": {
+                  "type": "string",
+                  "default": "dfsdf32r34grtvtbyny6"
+                },
+                "refresh_token": {
+                  "type": "string",
+                  "default": "dfs45g45g34assdfyny6"
+                },
+                "user": {
+                  "$ref": "./user.json"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/password/forgot": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "description": "Forgot password",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "body",
+            "type": "string",
+            "description": "User email"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "It returns just status code 201"
+          }
+        }
+      }
+    },
+    "/auth/password/reset/{action_token}": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "description": "Reset password",
+        "parameters": [
+          {
+            "name": "password",
+            "in": "body",
+            "type": "string",
+            "description": "It should be a new password"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "It returns just status code 200"
+          }
+        }
+      }
+    }
+  }
+}
