@@ -8,7 +8,7 @@ router.post(
     '/',
     userMiddleware.getUserByDynamicParams('email'),
     userMiddleware.isUserExist(false),
-    userMiddleware.checkUserStatus,
+    // userMiddleware.checkUserStatus,
     authController.login,
 );
 
